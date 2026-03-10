@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ayub Farah — DevOps Engineer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold: #FFE81F;
+      --gold-dim: #b8a800;
+      --dark: #020409;
+      --deep: #050c18;
+      --panel: rgba(255,232,31,0.04);
+      --border: rgba(255,232,31,0.15);
+      --text: #c8d6e5;
+      --muted: #5a6a7a;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--dark);
+      color: var(--text);
+      font-family: 'Share Tech Mono', monospace;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* STARFIELD */
+    #stars {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* SCANLINES */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.08) 2px,
+        rgba(0,0,0,0.08) 4px
+      );
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    /* LAYOUT */
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* HEADER */
+    header {
+      padding: 3rem 0 1rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .crawl-intro {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.4em;
+      color: var(--gold-dim);
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
+      animation: fadeIn 1s ease both;
+    }
+
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: clamp(2.2rem, 6vw, 4rem);
+      font-weight: 900;
+      color: var(--gold);
+      text-shadow: 0 0 40px rgba(255,232,31,0.4), 0 0 80px rgba(255,232,31,0.15);
+      letter-spacing: 0.05em;
+      line-height: 1.1;
+      animation: fadeIn 1.2s ease both 0.2s;
+    }
+
+    .subtitle {
+      margin-top: 0.8rem;
+      font-size: 0.85rem;
+      letter-spacing: 0.3em;
+      color: var(--muted);
+      text-transform: uppercase;
+      animation: fadeIn 1.2s ease both 0.5s;
+    }
+
+    .divider {
+      width: 200px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 2rem auto;
+      animation: fadeIn 1s ease both 0.8s;
+    }
+
+    /* SECTION LABEL */
+    .section-label {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.55rem;
+      letter-spacing: 0.5em;
+      color: var(--gold-dim);
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    /* PROJECTS GRID */
+    .projects {
+      padding: 2rem 0 6rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(460px, 1fr));
+      gap: 2rem;
+    }
+
+    /* PROJECT CARD */
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      position: relative;
+      padding: 2rem;
+      transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+      clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px));
+      animation: slideUp 0.8s ease both;
+    }
+
+    .card:nth-child(2) { animation-delay: 0.2s; }
+
+    .card:hover {
+      border-color: rgba(255,232,31,0.5);
+      box-shadow: 0 0 40px rgba(255,232,31,0.08), inset 0 0 60px rgba(255,232,31,0.03);
+      transform: translateY(-4px);
+    }
+
+    /* Corner accent */
+    .card::before {
+      content: '';
+      position: absolute;
+      top: -1px; right: -1px;
+      width: 28px; height: 28px;
+      background: var(--gold);
+      clip-path: polygon(100% 0, 100% 100%, 0 0);
+      opacity: 0.7;
+      transition: opacity 0.3s;
+    }
+    .card:hover::before { opacity: 1; }
+
+    .card-badge {
+      font-size: 0.55rem;
+      letter-spacing: 0.35em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .card-badge::before {
+      content: '';
+      display: inline-block;
+      width: 6px; height: 6px;
+      background: var(--gold);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--gold);
+      animation: pulse 2s infinite;
+    }
+
+    .card h2 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 0.8rem;
+      letter-spacing: 0.05em;
+    }
+
+    .card p {
+      font-size: 0.8rem;
+      line-height: 1.8;
+      color: var(--text);
+      margin-bottom: 1.5rem;
+    }
+
+    /* TAGS */
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.8rem;
+    }
+
+    .tag {
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      padding: 0.3rem 0.7rem;
+      border: 1px solid var(--border);
+      color: var(--gold-dim);
+      text-transform: uppercase;
+      background: rgba(255,232,31,0.03);
+    }
+
+    /* LINK */
+    .card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(255,232,31,0.3);
+      padding-bottom: 2px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .card-link:hover {
+      color: #fff;
+      border-color: #fff;
+    }
+    .card-link::after { content: '→'; }
+
+    /* STATS ROW */
+    .stats {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,0.3);
+    }
+    .stat {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+    .stat-label {
+      font-size: 0.5rem;
+      letter-spacing: 0.3em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+    .stat-value {
+      font-size: 0.75rem;
+      color: var(--gold);
+    }
+
+    /* FOOTER */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid var(--border);
+    }
+    footer p {
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+    @keyframes twinkle {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.2; }
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 560px) {
+      .grid { grid-template-columns: 1fr; }
+      h1 { font-size: 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="stars"></canvas>
+
+<div class="container">
+  <header>
+    <div class="crawl-intro">A long time ago in a cloud far, far away...</div>
+    <h1>AYUB FARAH</h1>
+    <div class="subtitle">DevOps Engineer &nbsp;·&nbsp; Infrastructure &nbsp;·&nbsp; Cloud</div>
+    <div class="divider"></div>
+  </header>
+
+  <section class="projects">
+    <div class="section-label">— Transmission Log: Active Deployments —</div>
+
+    <div class="grid">
+
+      <!-- EKS PROJECT -->
+      <div class="card">
+        <div class="card-badge">Mission Alpha</div>
+        <h2>AWS EKS Kubernetes Platform</h2>
+        <p>
+          A production-grade Kubernetes platform on AWS, deploying a containerised 2048 game with full GitOps automation. Built with Terraform, Helm, and Argo CD for continuous sync and rollback — all secured with IRSA least-privilege roles and Trivy image scanning.
+        </p>
+        <div class="stats">
+          <div class="stat">
+            <span class="stat-label">Infra</span>
+            <span class="stat-value">Terraform</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Orchestration</span>
+            <span class="stat-value">EKS + Helm</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">GitOps</span>
+            <span class="stat-value">Argo CD</span>
+          </div>
+        </div>
+        <div class="tags">
+          <span class="tag">Kubernetes</span>
+          <span class="tag">Terraform</span>
+          <span class="tag">GitHub Actions</span>
+          <span class="tag">Docker</span>
+          <span class="tag">Argo CD</span>
+          <span class="tag">Trivy</span>
+          <span class="tag">Grafana</span>
+          <span class="tag">IRSA</span>
+        </div>
+        <a class="card-link" href="https://github.com/ayubfarahh/EKS-Project" target="_blank" rel="noopener">View Repository</a>
+      </div>
+
+      <!-- ECS PROJECT -->
+      <div class="card">
+        <div class="card-badge">Mission Beta</div>
+        <h2>AWS ECS Threat Modelling Platform</h2>
+        <p>
+          A production-ready deployment of Amazon's open-source Threat Composer tool on AWS ECS. Features a fully automated CI/CD pipeline, modular Terraform infrastructure, public HTTPS access via an Application Load Balancer, and integrated Trivy security scanning throughout.
+        </p>
+        <div class="stats">
+          <div class="stat">
+            <span class="stat-label">Infra</span>
+            <span class="stat-value">Terraform</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Compute</span>
+            <span class="stat-value">ECS + ECR</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Access</span>
+            <span class="stat-value">ALB + HTTPS</span>
+          </div>
+        </div>
+        <div class="tags">
+          <span class="tag">ECS</span>
+          <span class="tag">Terraform</span>
+          <span class="tag">GitHub Actions</span>
+          <span class="tag">Docker</span>
+          <span class="tag">ALB</span>
+          <span class="tag">ACM</span>
+          <span class="tag">Route 53</span>
+          <span class="tag">Trivy</span>
+        </div>
+        <a class="card-link" href="https://github.com/ayubfarahh/ECS-Project" target="_blank" rel="noopener">View Repository</a>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+<footer>
+  <p>© Ayub Farah &nbsp;·&nbsp; ayubs.uk &nbsp;·&nbsp; May the Force be with your infrastructure</p>
+</footer>
+
+<script>
+  // Starfield
+  const canvas = document.getElementById('stars');
+  const ctx = canvas.getContext('2d');
+  let stars = [];
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+
+  function initStars() {
+    stars = [];
+    const count = Math.floor((canvas.width * canvas.height) / 3000);
+    for (let i = 0; i < count; i++) {
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 1.2,
+        alpha: Math.random(),
+        speed: Math.random() * 0.005 + 0.002,
+        phase: Math.random() * Math.PI * 2
+      });
+    }
+  }
+
+  function drawStars(t) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (const s of stars) {
+      const alpha = 0.3 + 0.7 * Math.abs(Math.sin(s.phase + t * s.speed));
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255,255,255,${alpha})`;
+      ctx.fill();
+    }
+    requestAnimationFrame(drawStars);
+  }
+
+  resize();
+  initStars();
+  window.addEventListener('resize', () => { resize(); initStars(); });
+  requestAnimationFrame(drawStars);
+</script>
+</body>
+</html>
